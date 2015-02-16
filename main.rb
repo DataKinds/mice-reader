@@ -16,7 +16,7 @@ def decomposeMouseAction(bytes)
 	direction = ""
 	if bytes[1] == 0 && bytes[2] == 0 #still
 		buttonBaseValue = 8
-		direction = "Still"
+		direction = "None"
 	end
 	if bytes[1] == 1 && bytes[2] == 0 #moving right
 		buttonBaseValue = 8
@@ -26,31 +26,31 @@ def decomposeMouseAction(bytes)
 		buttonBaseValue = 8
 		direction = "Up"
 	end
-	if bytes[1] == 255 && (bytes[2] == 0 || bytes[2] == 1) #moving left
+	if (bytes[1] == 255 || bytes[1] == 254) && (bytes[2] == 0 || bytes[2] == 1) #moving left
 		buttonBaseValue = 24
 		direction = "Left"
 	end
-	if (bytes[1] == 0 || bytes[1] == 1) && bytes[2] == 255 #moving down
+	if (bytes[1] == 0 || bytes[1] == 1) && (bytes[2] == 255 || bytes[2] == 254) #moving down
 		buttonBaseValue = 40
 		direction = "Down"
 	end
 	case bytes[0]
 	when buttonBaseValue + 0
-		output << "- None\n"
+		output << "None\n"
 	when buttonBaseValue + 1
-		output << "- Left Mouse Button\n"
+		output << "Left Mouse Button\n"
 	when buttonBaseValue + 2
-		output << "- Right Mouse Button\n" 
+		output << "Right Mouse Button\n" 
 	when buttonBaseValue + 3
-		output << "- Left Mouse Button\n- Right Mouse Button\n"
+		output << "Left Mouse Button\n- Right Mouse Button\n"
 	when buttonBaseValue + 4
-		output << "- Middle Mouse Button\n"
+		output << "Middle Mouse Button\n"
 	when buttonBaseValue + 5
-		output << "- Left Mouse Button\n- Middle Mouse Button\n"
+		output << "Left Mouse Button\n- Middle Mouse Button\n"
 	when buttonBaseValue + 6
-		output << "- Right Mouse Button\n- Middle Mouse Button\n"
+		output << "Right Mouse Button\n- Middle Mouse Button\n"
 	when buttonBaseValue + 7
-		output << "- Left Mouse Button\n- Right Mouse Button\n- Middle Mouse Button\n"
+		output << "Left Mouse Button\n- Right Mouse Button\n- Middle Mouse Button\n"
 	end
 	output << "Mouse Moving:\n#{direction}\n\n"
 	return output
